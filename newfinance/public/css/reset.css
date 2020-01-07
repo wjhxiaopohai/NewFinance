@@ -1,0 +1,65 @@
+/*样式重置:百度*/
+body,h1,h2,h3,h4,h5,h6,hr,p,b,blockquote,dl,dt,dd,ul,ol,li,pre,form,fieldset,legend,button,input,textarea,th,td {
+    margin: 0;
+    padding: 0;
+}
+html {
+    color: #323232;
+    /*overflow-y: scroll;*/
+    /*overflow: -moz-scrollbars-vertical;*/
+}
+body,button,input,select,textarea {
+    font-size: 14px;
+    font-family: arial,'Hiragino Sans GB','Microsoft Yahei','微软雅黑','宋体',\5b8b\4f53,Tahoma,Arial,Helvetica,STHeiti;
+}
+h1,h2,h3,h4,h5,h6 {
+    font-size: 100%;
+}
+em,i,strong,b {
+    font-style: normal;
+}
+ul,ol {
+    list-style: none;
+}
+a {
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+a:link,a:visited,a:active {
+    color: #999;
+}
+img {
+    border: 0;
+}
+button,input {
+    border: 0;
+    outline: none;
+}
+.fl {
+    float: left;
+}
+.fr {
+    float: right;
+}
+.cf::after {
+    clear: both;
+    content: '';
+    display: block;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

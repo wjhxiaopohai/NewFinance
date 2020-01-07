@@ -1,0 +1,1800 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <title>模仿今日头条</title>
+    <link rel="stylesheet" type="text/css" href="css/reset.css" />
+    <link rel="icon" href="images/favicon_5995b44.ico" />
+    <script src="./js/ajax.js"></script>
+    <style>
+        a:hover {
+            text-decoration: none;
+        }
+
+        /*App、天气、侵权*/
+        .head {
+            /*/!*固定位置*!/*/
+            /*position: fixed;*/
+            /*top: 0;*/
+            /*left: 0;*/
+            /*z-index: 2;*/
+
+            /*正常*/
+            width: 100%;
+            min-width: 1200px;
+            line-height: 34px;
+            color: #fff;
+            background-color: #222;
+            /*overflow: hidden;*/
+        }
+
+        .head-l {
+            position: relative;
+        }
+
+        .load-app {
+            padding: 0 10px;
+            border-right: 1px solid #3a3a3a;
+        }
+
+        .load-app a {
+            color: #fff;
+        }
+
+        .load-app a:hover {
+            text-decoration: none;
+        }
+
+        .weather {
+            padding: 0 10px;
+            /*border: 1px solid red;*/
+            cursor: pointer;
+        }
+
+        .weather span {
+            margin: 0 3px;
+        }
+
+        .hide-weather {
+            display: none;
+            position: absolute;
+            left: 76px;
+            top: 34px;
+            padding: 0 5px;
+            width: 220px;
+            height: 180px;
+            color: #444;
+            background-color: #fff;
+            border: 1px solid #e8e8e8;
+            z-index: 1;
+        }
+
+        .w-state {
+            padding: 0 5px;
+            background-color: #4dc71f;
+            color: #fff;
+            border-radius: 5px;
+        }
+
+        .m-weather ul {
+            margin: 0 9px;
+        }
+
+        .m-weather ul li {
+            text-align: center;
+        }
+
+        /*隐藏天气*/
+        .weather:hover .hide-weather {
+            display: block;
+        }
+
+        /*右边：侵权 */
+        .tort a,
+        .product a {
+            color: #fff;
+        }
+
+        .tort a:hover,
+        .product a:hover {
+            text-decoration: none;
+        }
+
+        .tort {
+            border-right: 1px solid #3a3a3a;
+        }
+
+        .tort,
+        .product {
+            padding: 0 10px;
+        }
+
+        /*主体*/
+        .main {
+            /*/!*固定位置*!/*/
+            /*margin: 34px;*/
+
+            /*正常*/
+            margin: 15px auto;
+            width: 1200px;
+
+            /*height: 800px;*/
+            /*border: 1px solid black;*/
+
+        }
+
+        /*左边*/
+        .main-l {
+            /*固定位置*/
+            /*position: fixed;*/
+            /*top: 34px;*/
+            width: 110px;
+            /*border: 1px solid red;*/
+        }
+
+        .l-nav {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .l-nav a {
+            font-size: 16px;
+            color: #444;
+        }
+
+        .l-nav a:hover {
+            text-decoration: none;
+        }
+
+        .l-nav li {
+            display: block;
+            padding: 10px 0;
+            margin-top: 3px;
+        }
+
+        .l-nav li:first-child,
+        .l-nav li:first-child a {
+            color: #fff;
+            background-color: #ed4040;
+            border-radius: 4px;
+        }
+
+        .l-nav li:hover {
+            background-color: #ed4040;
+            border-radius: 4px;
+        }
+
+        .l-nav li:hover>a {
+            color: #fff;
+        }
+
+        /*更多--隐藏部分*/
+        .main-more {
+            position: relative;
+        }
+
+        .more-hide {
+            display: none;
+            position: absolute;
+            left: 108px;
+            top: -185px;
+            padding: 5px;
+            width: 230px;
+            box-shadow: -1px 1px 1px #e8e8e8;
+            background-color: #fff;
+            z-index: 2;
+        }
+
+        .more-hide div {
+            padding: 10px 39px;
+            margin-top: 2px;
+            cursor: pointer;
+            /*border: 1px solid red;*/
+        }
+
+        .more-hide div:hover {
+            background-color: #ed4040;
+            border-radius: 4px;
+            color: white;
+        }
+
+        .more-hide div:hover a {
+            color: #fff;
+        }
+
+        /*显示隐藏*/
+        .main-more:hover .more-hide {
+            display: block;
+        }
+
+        /*中间*/
+        .main-c {
+            /*/!*固定位置*!/*/
+            /*margin-left: 140px;*/
+
+            /*正常*/
+            margin: 0 30px;
+            width: 680px;
+            /*border: 1px solid orange;*/
+        }
+
+        .head-publish {
+            border: 1px solid #e8e8e8;
+        }
+
+        .p-title ul li {
+            font-size: 16px;
+            padding: 10px 0;
+            margin-left: 20px;
+            cursor: pointer;
+        }
+
+        .p-title ul li:first-child {
+            border-bottom: 2px solid #ed4040;
+        }
+
+        .text {
+            position: relative;
+            padding: 15px 20px;
+            border-top: 1px solid #e8e8e8;
+            border-bottom: 1px solid #e8e8e8;
+            background-color: #f4f5f6;
+            /*防止textarea不能输入问题*/
+            -webkit-user-select: text !important
+                /*z-index: -1;*/
+        }
+
+        .text textarea {
+            background-color: #f4f5f6;
+            outline: none;
+            border: none;
+            resize: none;
+        }
+
+        .num-word {
+            position: absolute;
+            left: 600px;
+            top: 75px;
+            width: 70px;
+            text-align: center;
+            color: #fff;
+            background-color: #7a7a7b;
+            border-radius: 3px;
+
+        }
+
+        .push {
+            padding: 10px 0;
+            width: 200px;
+        }
+
+        .push span {
+            color: #222;
+        }
+
+        .push-l,
+        .push-r {
+            margin-left: 15px;
+        }
+
+        .push-l a:hover,
+        .push-r a:hover {
+            text-decoration: none;
+        }
+
+        .push-l img,
+        .push-r img {
+            vertical-align: bottom;
+        }
+
+        .send {
+            width: 125px;
+            height: 41px;
+            text-align: center;
+            line-height: 41px;
+            color: #fff;
+            background-color: #f48c8c;
+            cursor: pointer;
+        }
+
+        /*隐藏未读消息*/
+        .hide-msg {
+            position: relative;
+            padding: 8px 0;
+            text-align: center;
+            color: #fff;
+            background-color: #78b1f6;
+            /*z-index: -1;*/
+        }
+
+        .hide-msg span {
+            cursor: pointer;
+        }
+
+        .hide-msg>div {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        /*新闻-无图片*/
+        .news {
+            position: relative;
+            margin-top: 5px;
+            /*z-index: -1;*/
+            /*padding-bottom: 5px;*/
+            /*border-bottom: 1px solid #e8e8e8;*/
+        }
+
+        .news h2 {
+            font-size: 20px;
+            /*只显示两行*/
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            cursor: pointer;
+        }
+
+        .news p {
+            padding: 10px 2px;
+            border-bottom: 1px solid #e8e8e8
+        }
+
+        .news .type {
+            color: #87a5b5;
+            border: 1px solid #87a5b5;
+            /*cursor: pointer;*/
+        }
+
+        .not-interest {
+            position: absolute;
+            right: 9px;
+            bottom: 9px;
+            cursor: pointer;
+        }
+
+        .not-il,
+        .not-ir {
+            display: inline-block;
+        }
+
+        .not-ir {
+            font-size: 16px;
+
+        }
+
+        .not-il {
+            display: none;
+
+        }
+
+        .not-interest:hover {
+            background-color: #f85959;
+            border-radius: 4px;
+        }
+
+        .not-interest:hover .not-il,
+        .not-interest:hover .not-ir {
+            color: #fff;
+            display: inline-block;
+        }
+
+        /*带图片新闻*/
+        .news-img {
+            /*margin: 0 10px;*/
+            padding: 4px 0;
+            border-bottom: 1px solid #e8e8e8;
+            box-sizing: border-box;
+        }
+
+        .news-img-l img {
+            width: 190px;
+            height: 127px;
+            /*height: auto;*/
+            cursor: pointer;
+        }
+
+        .news-img-r {
+            position: relative;
+            width: 450px;
+            padding: 16px 10px;
+            /*z-index: -1;*/
+            /*height: 127px;*/
+            /*border: 1px solid black;*/
+            /*background-color: yellow;*/
+        }
+
+        .news-img-r h2 {
+            font-size: 20px;
+            /*white-space: normal;*/
+            /*显示两行*/
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+
+            cursor: pointer;
+        }
+
+        .news-img-r p {
+            margin-top: 20px;
+        }
+
+        .news-img-r .type {
+            color: #87a5b5;
+            border: 1px solid #87a5b5;
+            /*cursor: pointer;*/
+        }
+
+        /*不感兴趣*/
+        .news-img-interest {
+            position: absolute;
+            right: -10px;
+            bottom: 16px;
+            cursor: pointer;
+        }
+
+        .news-img-interest .not-i {
+            font-size: 16px;
+        }
+
+        .news-img-interest .not-i,
+        .news-img-interest .not-ii {
+            display: inline-block;
+        }
+
+        .news-img-interest .not-ii {
+            display: none;
+        }
+
+        .news-img-interest:hover {
+            color: #fff;
+            background-color: #f85959;
+            border-radius: 4px;
+
+        }
+
+        .news-img-interest:hover .not-ii {
+            display: inline-block;
+        }
+
+
+        /*右边主体*/
+        .main-r {
+            width: 340px;
+            /*border: 1px solid yellow;*/
+        }
+
+        /*搜索框:search*/
+        .search {
+            background-color: #f5f6f7;
+            /*border:1px solid #e8e8e8;*/
+            /*border-radius: 5px;*/
+        }
+
+        .search-l,
+        .search-r {
+            display: inline-block;
+        }
+
+        .search-l {
+            padding: 13px 10px;
+            border: 1px solid #e8e8e8;
+            border-right-width: 0;
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+        }
+
+        .search-l input {
+            background-color: #f5f6f7;
+        }
+
+        .search-l:hover {
+            border-color: #208eda;
+        }
+
+        .search-r {
+            margin-left: -3px;
+            padding: 13px 25px;
+            color: #fff;
+            /*text-align: center;*/
+            background-color: #208eda;
+            border-top-right-radius: 5px;
+            border-bottom-right-radius: 5px;
+            cursor: pointer;
+        }
+
+        /*登录框:login*/
+        .login,
+        .taobao,
+        .hot-news,
+        .delicacy-img,
+        .more,
+        .links,
+        .copyright,
+        .login-hide {
+            margin-top: 20px;
+            padding: 20px 20px;
+            background-color: #f5f6f7;
+        }
+
+        .login-main {
+            padding: 10px 20px;
+            text-align: center;
+            background-color: #fff;
+            border: 1px solid #e8e8e8;
+        }
+
+        .login-main span {
+            font-size: 12px;
+            color: #777777;
+        }
+
+        .login-main .btn {
+            margin-top: 15px;
+            line-height: 35px;
+            color: #fff;
+            background-color: #ed4040;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .login-main .btn:hover {
+            opacity: 0.9;
+        }
+
+        .login-method {
+            margin-top: 15px;
+        }
+
+        .login-method a {
+            display: inline-block;
+            margin: 0 10px;
+        }
+
+        .login-method a:hover {
+            text-decoration: none;
+            opacity: 0.8;
+        }
+
+        /*淘宝框:taobao*/
+        .taobao .img-wrap {
+            position: relative;
+            border: 2px solid #ff5722f5;
+        }
+
+        .taobao .img-contain {
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        /*24小时热闻:hot-news*/
+        .hot-news,
+        .delicacy-img,
+        .more,
+        .links,
+        .copyright {
+            border-top: 2px solid #ed4040;
+        }
+
+        .hot-news h2,
+        .delicacy-img h2,
+        .more h2,
+        .links h2 {
+            font-size: 18px;
+        }
+
+        .hot-event li {
+            display: block;
+            padding: 5px 0;
+            border-bottom: 1px solid #e8e8e8;
+        }
+
+        .hot-event li:last-child {
+            border-bottom: 0;
+        }
+
+        .hot-event img {
+            width: 100px;
+            height: 60px;
+            vertical-align: top;
+        }
+
+        .hot-event a {
+            color: #222;
+        }
+
+        .hot-img {
+            width: 100px;
+            height: 60px;
+        }
+
+        .hot-contain {
+            /*超出第二行显示省略号*/
+            padding: 0 10px;
+            width: 170px;
+            height: 60px;
+            line-height: 20px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+            -webkit-box-orient: vertical;
+        }
+
+        /*精彩图片:delicacy-img*/
+        .delicacy-img {}
+
+        .delicacy-wrap {}
+
+        .delicacy-contain {
+            width: 145px;
+            height: 145px;
+            margin-top: 10px;
+        }
+
+        .delicacy-contain a {
+            color: #222222;
+        }
+
+        .delicacy-contain a:hover {
+            color: #208eda;
+            text-decoration: none;
+        }
+
+        .delicacy-contain:nth-of-type(2n) {
+            margin-left: 10px;
+        }
+
+        .delicacy-contain li {
+            display: block;
+        }
+
+        .delicacy-contain li:last-child {
+            /*超出第二行显示省略号*/
+            height: 40px;
+            line-height: 20px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        /*更多*/
+        /*友情链接:links*/
+        .more a， .links a {
+            color: #777;
+        }
+
+        .more a:hover,
+        .links a:hover {
+            text-decoration: none;
+        }
+
+        .more ul li,
+        .links ul li {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .links ul {
+            margin-left: -20px;
+        }
+
+        .more ul li:nth-of-type(4n+1) {
+            margin-left: 0;
+        }
+
+        /*版权信息:copyright*/
+        .copyright img {
+            vertical-align: middle;
+        }
+
+        .copyright a {
+            color: #777;
+        }
+
+        .copyright a:hover {
+            text-decoration: none;
+        }
+
+        /*账号登录时的样式*/
+        .login-out {
+            position: relative;
+            left: 108px;
+        }
+
+        .login-out a {
+            font-size: 14px;
+        }
+
+        .login-out a:hover,
+        .login-out+a:hover,
+        .login-out+a:hover span {
+            color: #406599;
+            text-decoration: none;
+        }
+
+        .login-myself {}
+
+        .login-myself>img {
+            width: 120px;
+            height: 100px;
+            border-radius: 100%;
+        }
+
+        .login-myself+span {
+            color: #000;
+            font-size: 18px;
+        }
+
+
+        /*搜索后，显示(备注)关键字的颜色*/
+        .searchKey {
+            color: red;
+            font-weight: bold;
+        }
+
+        /*搜索后，提示没有找内容的样式*/
+        .not_find {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        /*点击“更多”，没有找到的数据样式*/
+        .sorts-not {
+            text-align: center;
+            font-size: 18px;
+            margin-top: 15px;
+        }
+
+        a[class] {
+            cursor: text;
+        }
+    </style>
+</head>
+
+<body>
+    <!--App、天气、侵权-->
+    <div class="head cf">
+        <!--左边-->
+        <div class="head-l fl cf">
+            <div class="fl load-app"><a href="javascript:;">下载APP</a></div>
+            <div class="fr weather">
+                <span>深圳</span>
+                <span>晴</span>
+                <span>19°</span>
+                <span>/</span>
+                <span>28°</span>
+                <span>▼</span>
+                <!--隐藏的天气-->
+                <div class="hide-weather">
+                    <div>
+                        <span>深圳</span>
+                        <span>东北风3级</span>
+                        <span class="w-state">良62</span>
+                    </div>
+                    <div class="cf m-weather">
+                        <ul class="fl">
+                            <li>今天</li>
+                            <li><img src="images/0.2491676.png" alt="" /></li>
+                            <li>19° / 28°</li>
+                        </ul>
+                        <ul class="fl">
+                            <li>明天</li>
+                            <li><img src="images/1.51a147f.png" alt="" /></li>
+                            <li>20° / 29°</li>
+                        </ul>
+                        <ul class="fl">
+                            <li>后天</li>
+                            <li><img src="images/0.2491676.png" alt="" /></li>
+                            <li>18° / 28°</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!--右边-->
+        <div class="head-r fr cf">
+            <div class="fl tort">
+                <a href="javascript:;">侵权投诉</a>
+            </div>
+            <div class="fr product">
+                <a href="javascript:;">头条产品</a>
+            </div>
+        </div>
+    </div>
+
+    <!--主体-->
+    <div class="main cf">
+        <!--左边:导航-->
+        <div class="main-l fl">
+            <img src="images/logo.271e845.png" width="110px" alt="" />
+            <div class="l-nav">
+                <ul>
+                    <li><a href="javascript:;">推荐</a></li>
+                    <li><a href="javascript:;">西瓜视频</a></li>
+                    <li><a href="javascript:;">热点</a></li>
+                    <li><a href="javascript:;">直播</a></li>
+                    <li><a href="javascript:;">图片</a></li>
+                    <li><a href="javascript:;">科技</a></li>
+                    <li><a href="javascript:;">娱乐</a></li>
+                    <li><a href="javascript:;">游戏</a></li>
+                    <li><a href="javascript:;">体育</a></li>
+                    <li><a href="javascript:;">懂车帝</a></li>
+                    <li><a href="javascript:;">财经</a></li>
+                    <li><a href="javascript:;">搞笑</a></li>
+                    <li class="main-more">
+                        <a href="javascript:;">更多</a>
+                        <!--更多：隐藏部分-->
+                        <div class="more-hide cf" id="more-hide">
+                            <div class="fl"><a href="javascript:;"></a>军事</a></div>
+                            <div class="fl"><a href="javascript:;">国际</a></div>
+                            <div class="fl"><a href="javascript:;">时尚</a></div>
+                            <div class="fl"><a href="javascript:;">旅游</a></div>
+                            <div class="fl"><a href="javascript:;">探索</a></div>
+                            <div class="fl"><a href="javascript:;">育儿</a></div>
+                            <div class="fl"><a href="javascript:;">养生</a></div>
+                            <div class="fl"><a href="javascript:;">美食</a></div>
+                            <div class="fl"><a href="javascript:;">历史</a></div>
+                            <div class="fl"><a href="javascript:;">其他</a></div>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+        <!--中间:主体-->
+        <div class="main-c fl" id="searchShow">
+            <!--中间-顶部-->
+            <div class="head-publish">
+                <div class="p-title">
+                    <ul class="cf">
+                        <li class="fl">发图文</li>
+                        <li class="fl">写文章</li>
+                        <li class="fl">提问题</li>
+                        <li class="fl">发视频</li>
+                    </ul>
+                </div>
+                <div class="text">
+                    <textarea id="publish-txt" name="" maxlength="600" cols="89" rows="4"
+                        placeholder="有什么新鲜事想告诉大家"></textarea>
+                    <!--1000字-->
+                    <div class="num-word" id="word-num">0/600字</div>
+                </div>
+                <div class="cf">
+                    <div class="push cf fl">
+                        <div class="push-l fl">
+                            <a href="javascript:;">
+                                <img src="images/image-icon.png" width="21px" height="21px" alt="" />
+                                <span>图片</span>
+                            </a>
+                        </div>
+                        <div class="push-r fl">
+                            <a href="javascript:;">
+                                <img src="images/emoji-icon.png" width="21px" height="21px" alt="" />
+                                <span>表情</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="fr send" id="send">发布</div>
+                </div>
+            </div>
+
+            <!--点击查看更多-->
+            <div class="hide-msg">
+                <span id="look-more">点击查看更多</span>
+                <div id="close-more">×</div>
+            </div>
+
+            <!--新闻多列表-->
+            <!--不带图新闻-->
+            <div id="news">
+                <!--<div class="news">-->
+                <!--<h2>中共中央关于坚持和完善中国特色社会主义制度 推进国家治理体系和治理能力现代化若干重大问题的决定</h2>-->
+                <!--<p>-->
+                <!--<span class="type">时政</span>-->
+                <!--<a  href="">新华客户端</a>-->
+                <!--<a  href="">19评论</a>-->
+                <!--<span>刚刚</span>-->
+                <!--</p>-->
+                <!--&lt;!&ndash;不感兴趣&ndash;&gt;-->
+                <!--<div class="not-interest">-->
+                <!--<div class="not-il">不感兴趣</div>-->
+                <!--<div class="not-ir">×</div>-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--<div class="news">-->
+                <!--<h2>习近平出席第二届中国国际进口博览会开模式并发表主旨演讲</h2>-->
+                <!--<p>-->
+                <!--<span class="type">时政</span>-->
+                <!--<a  href="">央视网新闻</a>-->
+                <!--<a  href="">560评论</a>-->
+                <!--<span>6分钟前</span>-->
+                <!--</p>-->
+                <!--&lt;!&ndash;不感兴趣&ndash;&gt;-->
+                <!--<div class="not-interest">-->
+                <!--<div class="not-il">不感兴趣</div>-->
+                <!--<div class="not-ir">×</div>-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--<div class="news">-->
+                <!--<h2>李克强同泰国总理巴育举行会谈时强调 推动中泰全面战略合作伙伴关系深入发展让  “中泰一家亲” 亲上加亲</h2>-->
+                <!--<p>-->
+                <!--<span class="type">国际</span>-->
+                <!--<a  href="">光明网</a>-->
+                <!--<a  href="">评论</a>-->
+                <!--<span>1小时前</span>-->
+                <!--</p>-->
+                <!--&lt;!&ndash;不感兴趣&ndash;&gt;-->
+                <!--<div class="not-interest">-->
+                <!--<div class="not-il">不感兴趣</div>-->
+                <!--<div class="not-ir">×</div>-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--<div class="news">-->
+                <!--<h2>袁隆平的梦： “禾下乘凉”和“覆盖全球”</h2>-->
+                <!--<p>-->
+                <!--<span class="type">三农</span>-->
+                <!--<a  href="">新京报</a>-->
+                <!--<a  href="">233评论</a>-->
+                <!--<span>2小时前</span>-->
+                <!--</p>-->
+                <!--&lt;!&ndash;不感兴趣&ndash;&gt;-->
+                <!--<div class="not-interest">-->
+                <!--<div class="not-il">不感兴趣</div>-->
+                <!--<div class="not-ir">×</div>-->
+                <!--</div>-->
+                <!--</div>-->
+            </div>
+
+            <!--带图新闻-->
+            <div id="news-img">
+                <!--<div class="news-img cf">-->
+                <!--<div class="news-img-l fl">-->
+                <!--<img src="images/RgSYsPeIbXUyvi.jpg" alt=""/>-->
+                <!--</div>-->
+                <!--<div class="news-img-r fl">-->
+                <!--<h2>中国抛近千亿美债意味着什么？罗杰斯：中国持万亿美债而握主动权</h2>-->
+                <!--<p>-->
+                <!--<span class="type">财经</span>-->
+                <!--<a  href="">新京报</a>-->
+                <!--<a  href="">603评论</a>-->
+                <!--<span>3小时前</span>-->
+                <!--</p>-->
+                <!--&lt;!&ndash;不感兴趣&ndash;&gt;-->
+                <!--<div class="news-img-interest">-->
+                <!--<div class="not-ii">不感兴趣</div>-->
+                <!--<div class="not-i">×</div>-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--<div class="news-img cf">-->
+                <!--<div class="news-img-l fl">-->
+                <!--<img src="images/RgOzn71D9ipnT2.jpg" alt=""/>-->
+                <!--</div>-->
+                <!--<div class="news-img-r fl">-->
+                <!--<h2>"26条措施" 震动台湾，台网友 "最看重" 的是这一条</h2>-->
+                <!--<p>-->
+                <!--<span class="type">国内</span>-->
+                <!--<a  href="">新京报</a>-->
+                <!--<a  href="">213评论</a>-->
+                <!--<span>5小时前</span>-->
+                <!--</p>-->
+                <!--&lt;!&ndash;不感兴趣&ndash;&gt;-->
+                <!--<div class="news-img-interest">-->
+                <!--<div class="not-ii">不感兴趣</div>-->
+                <!--<div class="not-i">×</div>-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--<div class="news-img cf">-->
+                <!--<div class="news-img-l fl">-->
+                <!--<img src="images/RggB9JgFE7uc7g.jpg" alt=""/>-->
+                <!--</div>-->
+                <!--<div class="news-img-r fl">-->
+                <!--<h2>香港旅游局进博会设主题展位 怀旧风格展现独特魅力</h2>-->
+                <!--<p>-->
+                <!--<span class="type">旅游</span>-->
+                <!--<a  href="">中国新闻网</a>-->
+                <!--<a  href="">评论</a>-->
+                <!--<span>9小时前</span>-->
+                <!--</p>-->
+                <!--&lt;!&ndash;不感兴趣&ndash;&gt;-->
+                <!--<div class="news-img-interest">-->
+                <!--<div class="not-ii">不感兴趣</div>-->
+                <!--<div class="not-i">×</div>-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--<div class="news-img cf">-->
+                <!--<div class="news-img-l fl">-->
+                <!--<img src="images/ReCBHmiHsqoPsI.jpg" alt=""/>-->
+                <!--</div>-->
+                <!--<div class="news-img-r fl">-->
+                <!--<h2>微软官方公布黑5促销时间安排 11月5-11日Xbox金会员促销 含《侍魂晓》 《迸发2》</h2>-->
+                <!--<p>-->
+                <!--<span class="type">游戏</span>-->
+                <!--<a  href="">游戏早知道</a>-->
+                <!--<a  href="">603评论</a>-->
+                <!--<span>12小时前</span>-->
+                <!--</p>-->
+                <!--&lt;!&ndash;不感兴趣&ndash;&gt;-->
+                <!--<div class="news-img-interest">-->
+                <!--<div class="not-ii">不感兴趣</div>-->
+                <!--<div class="not-i">×</div>-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--<div class="news-img cf">-->
+                <!--<div class="news-img-l fl">-->
+                <!--<img src="images/7857c48190ce4ea6a3ec6a5c0a444216.jpg" alt=""/>-->
+                <!--</div>-->
+                <!--<div class="news-img-r fl">-->
+                <!--<h2>王者模拟战：天美削了 "养猪流" ，连主播都懵了，玩蜀国找虐？</h2>-->
+                <!--<p>-->
+                <!--<span class="type">游戏</span>-->
+                <!--<a  href="">一颗铃铛儿</a>-->
+                <!--<a  href="">217评论</a>-->
+                <!--<span>1天前</span>-->
+                <!--</p>-->
+                <!--&lt;!&ndash;不感兴趣&ndash;&gt;-->
+                <!--<div class="news-img-interest">-->
+                <!--<div class="not-ii">不感兴趣</div>-->
+                <!--<div class="not-i">×</div>-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--</div>-->
+            </div>
+
+
+        </div>
+
+        <!--右边：登录、淘宝等...-->
+        <div class="main-r fr">
+            <!--搜索框:search-->
+            <div class="search">
+                <div class="search-l">
+                    <input type="text" id="search_val" size="30" placeholder="请输入要搜索的内容" />
+                </div>
+                <div class="search-r" onclick="getSearch()">
+                    搜索
+                </div>
+            </div>
+
+            <!--登录框:login-->
+            <div class="login" id="login">
+                <div class="login-main">
+                    <span>登录后可以保存您的浏览喜好、评论、收藏，并与APP同步，更可以发布微头条</span>
+                    <a href="http://127.0.0.1:8080/user/user_login.html">
+                        <div class="btn">登录</div>
+                    </a>
+                    <div class="login-method">
+                        <a href="javascript:;">
+                            <ul>
+                                <li>
+                                    <img src="images/qq_small.png" heigth="40px" alt="" />
+                                </li>
+                                <li>QQ</li>
+                            </ul>
+                        </a>
+                        <a href="javascript:;">
+                            <ul>
+                                <li>
+                                    <img src="images/weixin_small.png" height="40px" alt="" />
+                                </li>
+                                <li>微信</li>
+                            </ul>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!--隐藏的已登录时状态；当登录信息后，这里display:block,否则为display:none-->
+            <div class="login-hide" id="login-hide" style="display: none">
+                <div class="login-main">
+                    <div class="login-out">
+                        <a href="http://127.0.0.1:8080/index.html">退出登录</a>
+                    </div>
+                    <!--下面的a链接用js实现，并在url后绑定u_id值-->
+                    <a href="javascript:;" id="user_myself">
+                        <div class="login-myself">
+                            <img id="show_head_img" src="./images/u=1659248375,1169119359&fm=26&gp=0.jpg"
+                                alt="图片资源不存在！" />
+                        </div>
+                        <span id="show_user_name"></span>
+                    </a>
+                </div>
+            </div>
+
+
+            <!--淘宝框:taobao-->
+            <div class="taobao">
+                <div class="img-wrap">
+                    <img src="images/图片1.png" alt="图片资源丢失" />
+                    <div class="img-contain">
+                        <img src="images/T17hJxFCxXXXb1upjX.png" alt="" />
+                    </div>
+                </div>
+            </div>
+
+            <!--24小时热闻:hot-news-->
+            <div class="hot-news">
+                <h2>24小时热闻</h2>
+                <ul class="hot-event">
+                    <li class="cf">
+                        <a href="javascript:;">
+                            <div class="hot-img fl">
+                                <img src="images/b5735c73dc5a410c889e3be58d17cfee.jpg" alt="" />
+                            </div>
+                            <div class="hot-contain fl">
+                                金希澈可能是最帅最善良的韩星，他收养了雪莉的无毛猫，真的仗义
+                            </div>
+                        </a>
+                    </li>
+                    <li class="cf">
+                        <a href="javascript:;">
+                            <div class="hot-img fl">
+                                <img src="images/004cbad7-c3b0-4498-888a-e22ace54f59c.jpg" alt="" />
+                            </div>
+                            <div class="hot-contain fl">
+                                中国富豪榜大洗牌！马云蝉联榜首之位，60位新晋富豪之榜。
+                            </div>
+                        </a>
+                    </li>
+                    <li class="cf">
+                        <a href="javascript:;">
+                            <div class="hot-img fl">
+                                <img src="images/09cb43b9e959469ba3ea2ba92ff22c82.jpg" alt="" />
+                            </div>
+                            <div class="hot-contain fl">
+                                林峯带张馨月婚后首同框，穿高贵礼服闪耀晚宴，寸步不离充满爱意。林峯带张馨月婚后首同框，穿高贵礼服闪耀晚宴，寸步不离充满爱意。
+                            </div>
+                        </a>
+                    </li>
+                    <li class="cf">
+                        <a href="javascript:;">
+                            <div class="hot-img fl">
+                                <img src="images/97b6de51c3cd4a9fbf280bf8e0d45501.jpg" alt="" />
+                            </div>
+                            <div class="hot-contain fl">
+                                国务院聚焦“菜篮子”：遏制部分产品价格过快上涨 确保困难群众基本生活。
+                            </div>
+                        </a>
+                    </li>
+                    <li class="cf">
+                        <a href="javascript:;">
+                            <div class="hot-img fl">
+                                <img src="images/7e54a56cade24fb49ddda1ac30f0e551.jpg" alt="" />
+                            </div>
+                            <div class="hot-contain fl">
+                                LOL手游马上要公测了，LOL用什么打败王者荣耀？网友表示想多了。 LOL手游马上要公测了，LOL用什么打败王者荣耀？网友表示想多了
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!--精彩图片:delicacy-img-->
+            <div class="delicacy-img">
+                <h2>精彩图片</h2>
+                <div class="delicacy-wrap cf">
+                    <div class="delicacy-contain fl">
+                        <a href="javascript:;">
+                            <ul>
+                                <li>
+                                    <img src="images/936917a2-d189-4b44-8309-a3b50a5716aa.jpg" width="145px"
+                                        height="100px" alt="" />
+                                </li>
+                                <li>
+                                    我13岁起数次被蛇咬，死里逃生成火遍香港的少女蛇王，现杀蛇为生
+                                </li>
+                            </ul>
+                        </a>
+                    </div>
+                    <div class="delicacy-contain fl">
+                        <a href="javascript:;">
+                            <ul>
+                                <li>
+                                    <img src="images/8f13e260ea60448a939aeb8f0ade44c9.jpg" width="145px" height="100px"
+                                        alt="" />
+                                </li>
+                                <li>
+                                    忘不了的你
+                                </li>
+                            </ul>
+                        </a>
+                    </div>
+                    <div class="delicacy-contain fl">
+                        <a href="javascript:;">
+                            <ul>
+                                <li>
+                                    <img src="images/54482d0565ef4fbb8a6cc1cec99eda3f.jpg" width="145px" height="100px"
+                                        alt="" />
+                                </li>
+                                <li>
+                                    红豆好吃有诀窍，做法简单又好吃，喜欢吃红豆的记得收藏
+                                </li>
+                            </ul>
+                        </a>
+                    </div>
+                    <div class="delicacy-contain fl">
+                        <a href="javascript:;">
+                            <ul>
+                                <li>
+                                    <img src="images/9ea04e3114c44fc59fde6578843cd469.jpg" width="145px" height="100px"
+                                        alt="" />
+                                </li>
+                                <li>
+                                    胡歌的“罗伊人”变胖了？剧外的菅纫姿变胖不一样，瘦下来是女神
+                                </li>
+                            </ul>
+                        </a>
+                    </div>
+                    <div class="delicacy-contain fl">
+                        <a href="javascript:;">
+                            <ul>
+                                <li>
+                                    <img src="images/28e46ce5271649f0b19a9ee7ecebfb3e.jpg" width="145px" height="100px"
+                                        alt="" />
+                                </li>
+                                <li>
+                                    夫妻出国前将女儿交给爷爷奶奶照顾，回来差点没认出
+                                </li>
+                            </ul>
+                        </a>
+                    </div>
+                    <div class="delicacy-contain fl">
+                        <a href="javascript:;">
+                            <ul>
+                                <li>
+                                    <img src="images/ea30d80a240d460687f60b3670b44a3d.jpg" width="145px" height="100px"
+                                        alt="" />
+                                </li>
+                                <li>
+                                    重磅的魅力
+                                </li>
+                            </ul>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!--更多:more-->
+            <div class="more">
+                <h2>更多</h2>
+                <ul class="cf">
+                    <li class="fl"><a href="javascript:;">关于头条</a></li>
+                    <li class="fl"><a href="javascript:;">加入头条</a></li>
+                    <li class="fl"><a href="javascript:;">媒体报道</a></li>
+                    <li class="fl"><a href="javascript:;">媒体合作</a></li>
+                    <li class="fl"><a href="javascript:;">产品合作</a></li>
+                    <li class="fl"><a href="javascript:;">合作声明</a></li>
+                    <li class="fl"><a href="javascript:;">广告投放</a></li>
+                    <li class="fl"><a href="javascript:;">联系我们</a></li>
+                    <li class="fl"><a href="javascript:;">用户协议</a></li>
+                    <li class="fl"><a href="javascript:;">侵权投诉</a></li>
+                    <li class="fl"><a href="javascript:;">廉洁举报</a></li>
+                </ul>
+            </div>
+
+            <!--友情链接:links-->
+            <div class="links">
+                <h2>友情链接</h2>
+                <ul class="cf">
+                    <li class="fl"><a href="javascript:;">光明网</a></li>
+                    <li class="fl"><a href="javascript:;">央广网</a></li>
+                    <li class="fl"><a href="javascript:;">国际在线</a></li>
+                    <li class="fl"><a href="javascript:;">中国西藏网</a></li>
+                    <li class="fl"><a href="javascript:;">参考消息</a></li>
+                    <li class="fl"><a href="javascript:;">环球网</a></li>
+                    <li class="fl"><a href="javascript:;">中青在线</a></li>
+                    <li class="fl"><a href="javascript:;">中青网</a></li>
+                    <li class="fl"><a href="javascript:;">海外网</a></li>
+                    <li class="fl"><a href="javascript:;">中国网</a></li>
+                    <li class="fl"><a href="javascript:;">未来网</a></li>
+                    <li class="fl"><a href="javascript:;">千龙网</a></li>
+                    <li class="fl"><a href="javascript:;">新京报</a></li>
+                    <li class="fl"><a href="javascript:;">北青网</a></li>
+                    <li class="fl"><a href="javascript:;">法制晚报</a></li>
+                    <li class="fl"><a href="javascript:;">北京晨报</a></li>
+                    <li class="fl"><a href="javascript:;">北京商报</a></li>
+                    <li class="fl"><a href="javascript:;">北京娱乐信报</a></li>
+                    <li class="fl"><a href="javascript:;">奥一网</a></li>
+                    <li class="fl"><a href="javascript:;">金羊网</a></li>
+                    <li class="fl"><a href="javascript:;">中国江苏网</a></li>
+                    <li class="fl"><a href="javascript:;">中国蓝TV</a></li>
+                </ul>
+            </div>
+
+            <!--版权信息:copyright-->
+            <div class="copyright">
+                <ul>
+                    <li><a href="javascript:;">© 2019 今日头条</a></li>
+                    <li><a href="javascript:;">中国互联网举报中心</a> </li>
+                    <li><a href="javascript:;">京ICP证140141号</a> </li>
+                    <li><a href="javascript:;">京ICP备12025439号-3</a></li>
+                    <li><a href="javascript:;">网络文化经营许可证</a></li>
+                    <li><a href="javascript:;">互联网药品信息服务资格证书</a></li>
+                    <li><a href="javascript:;">跟帖评论自律管理承诺书</a> </li>
+                    <li><a href="javascript:;">公司名称：北京字节跳动科技有限公司</a></li>
+                    <li><a href="javascript:;">
+                            <img src="images/gongan_d0289dc.png" alt="" />京公网安备 11000002002023号</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+
+    //判断是否将登录信息传递过来，若是 ==》将登录框隐藏，信息框显示。【window.load】
+    var login_hide = document.querySelector("#login-hide");
+    var login_init = document.querySelector("#login");
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //固定格式，将传过来的url进行解析，将后面的字符串提取出来
+    //获取地址栏查询字符串的方法(固定)    !!看浏览器的‘url’
+    var urlParams = new URLSearchParams(location.search);
+    var $u_id = urlParams.get("u_id");  //为用户的的索引u_id,供全局使用。
+    var $head_img = urlParams.get("head_img");
+    var $uname = urlParams.get("uname");
+
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    console.log("数据库响应的用户索引\"u_id\"为:" + $u_id);
+    //console.log($head_img);
+    //console.log($uname);
+    //console.log(typeof $u_id);
+    //console.log(typeof  $u_id.length);//number ==》防止url加入"u_id="时,显示display：none的区域。
+    if ($u_id != null && $u_id.length != 0) {
+        login_init.style.display = "none";
+        login_hide.style.display = "block";
+    } else {
+        login_init.style.display = "block";
+        login_hide.style.display = "none";
+    }
+
+
+    //对网址的字段进行解码
+    $u_id = unescape($u_id);
+    $head_img = unescape($head_img);
+    $uname = unescape($uname);
+
+
+    //展示用户从url获取的账号信息（昵称+头像）
+    function showUserMessage() {
+        //调用ajax从后台获取用户数据
+        var show_head_img = document.querySelector("#show_head_img");   //头像
+        var show_user_name = document.querySelector("#show_user_name");  //用户名字
+        var user_myself = document.querySelector("#user_myself");  //跳转到用户界面的链接，带拼接uid
+        show_head_img.src = "http://127.0.0.1:8080/images/" + $head_img;
+        show_user_name.innerHTML = $uname;  //展示用户登录时，显示名字
+        console.log("$uname=" + $uname);
+        //给跳转到user_myself.html的url末尾赋值 “$u_id”
+        user_myself.href = "http://127.0.0.1:8080/user/user_myself.html?u_id=" + $u_id;
+        //        //用登录成功时传过来的数据，可以少写一个接口
+        //        ajax({
+        //            url:"/user/user_login",
+        //            type:"GET",
+        //            async:true,
+        //            //提交数据
+        //            data: {
+        //                "u_id":$u_id
+        //            },
+        //            //响应得到的数据(回调函数:查询返回的是数组对象)
+        //            success: function(data) {
+        //                console.log(data);
+        //            }
+        //        });
+    }
+
+
+    //获取没有图片的文章资源
+    function getNotImg() {
+        //获取没有图片的元素
+        var notImg = document.querySelector("#news");
+        ajax({
+            url: "/comment/notImg",
+            type: "get",
+            async: true,
+            //提交的数据
+            data: {},
+            //响应得到的数据
+            success: function (data) {
+                console.log("不含图片的");
+                console.log(data);
+                var html = "";
+                for (var i = 0; i < data.length; i++) {
+                    html += `
+                    <div class="news" data-val="${data[i].a_id}">
+                        <h2>${data[i].title}</h2>
+                        <p>
+                            <span class="type">${data[i].sorts}</span>
+                            <a class=""  href="javascript:;">${data[i].writer}</a>
+                            <a class="" href="javascript:;">评论数</a>
+                            <span>${data[i].pubdate}</span>
+                        </p>
+                        <div class="not-interest">
+                            <div class="not-il">不感兴趣</div>
+                            <div class="not-ir">×</div>
+                        </div>
+                    </div>
+                    `;
+                }
+                notImg.innerHTML = html;
+            }
+        });
+    }
+
+
+    //获取包含图片的文章资源
+    function getHasImg() {
+        //获取没有图片的元素
+        var newsImg = document.querySelector("#news-img");
+        ajax({
+            url: "/comment/hasImg",
+            type: "get",
+            async: true,
+            //提交的数据
+            data: {},
+            //响应得到的数据
+            success: function (data) {
+                console.log("包含图片的");
+                console.log(data);  //类数组对象
+                var html = "";
+                for (var i = 0; i < data.length; i++) {
+                    html += `
+                    <div class="news-img cf" data-val="${data[i].a_id}">
+                        <div class="news-img-l fl">
+                            <img src="images/${data[i].img_url}" alt="图片资源不存在"/>
+                        </div>
+                        <div class="news-img-r fl">
+                            <h2>${data[i].title}</h2>
+                            <p>
+                                <span class="type">${data[i].sorts}</span>
+                                <a class="" href="javascript:;">${data[i].writer}</a>
+                                <a class="" href="javascript:;">评论数</a>
+                                <span>${data[i].pubdate}</span>
+                            </p>
+                                <!--不感兴趣-->
+                            <div class="news-img-interest">
+                                <div class="not-ii">不感兴趣</div>
+                                <div class="not-i">×</div>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                }
+                newsImg.innerHTML = html;
+            }
+        });
+    }
+
+
+    //获取search搜索框的内容，并显示出来。
+    function getSearch() {
+        //查询时，将用户恶意输入d的 “空格” replace 转为 “”
+        var search_val = document.querySelector("#search_val").value;
+        //console.log("搜索框输入的值为："+search_val);
+        //正则去除“空格”，记得"g"全局，否则就只执行第一个空格
+        var reg = new RegExp(/\s+/g);
+        var newVal = search_val.replace(reg, "");
+        //console.log("去掉空格后的值:"+newVal);
+        //console.log(newVal.length);
+
+        var searchShow = document.querySelector("#searchShow");
+        //判断搜索框内容是否为空
+        if (newVal != "") {
+            ajax({
+                url: "/comment/index_search",
+                type: "GET",
+                async: true,
+                data: {
+                    "searchValue": newVal
+                },
+                success: function (data) {
+                    console.log(data);
+                    if (data.msg != "0") {
+                        var html = "";
+                        for (var i = 0; i < data.length; i++) {
+                            //将搜索的"关键字",转为红色字体
+                            var $title = data[i].title.replace(newVal, `<span class="searchKey">${newVal}</span>`);
+                            var $writer = data[i].writer.replace(newVal, `<span class="searchKey">${newVal}</span>`)
+                            html += `
+                            <div class="news-img cf" data-val="${data[i].a_id}">
+                                <div class="news-img-l fl">
+                                    <img src="images/${data[i].img_url}" alt="图片丢失或不存在"/>
+                                </div>
+                                <div class="news-img-r fl">
+                                    <h2>${$title}</h2>
+                                    <p>
+                                        <span class="type">${data[i].sorts}</span>
+                                        <a class="" href="javascript:;">${$writer}</a>
+                                        <a class="" href="javascript:;">评论数</a>
+                                        <span>${data[i].pubdate}</span>
+                                    </p>
+                                        <!--不感兴趣-->
+                                    <div class="news-img-interest">
+                                        <div class="not-ii">不感兴趣</div>
+                                        <div class="not-i">×</div>
+                                    </div>
+                                </div>
+                            </div>
+                            `;
+                        }
+                        searchShow.innerHTML = html;
+                    } else {
+                        searchShow.innerHTML = "<div class='not_find'>暂未找到相关的内容！</div>";
+                    }
+                }
+            });
+        } else {
+            alert("搜索内容不能为空！");
+        }
+
+    }
+
+
+    //用户发表文章时，计算显示字数,不能超过600字！
+    {
+        let publishTxt = document.querySelector("#publish-txt");
+        let wordNum = document.querySelector("#word-num");
+        publishTxt.oninput = function () {
+            if (publishTxt.value.length > 600) {
+                wordNum.innerHTML = "600/600字";
+            } else {
+                wordNum.innerHTML = publishTxt.value.length + "/600字";
+            }
+        }
+    }
+
+    //点击查看更多信息(显示所有含图片资源)      http://127.0.0.1:8080/comment/hasImgMore
+    {
+        let closeMore = document.getElementById("close-more");
+        //console.log(closeMore);
+        //隐藏
+        closeMore.onclick = function (e) {
+            //console.log(e.target.parentNode);
+            e.target.parentNode.style.display = "none";
+        }
+        //点击查看更多图片资源信息
+        let lookMore = document.querySelector("#look-more");
+        //console.log(lookMore);
+        lookMore.onclick = function () {
+            var newsImg = document.querySelector("#news-img");
+            ajax({
+                url: "http://127.0.0.1:8080/comment/hasImgMore",
+                type: "get",
+                async: true,
+                //提交的数据
+                data: {},
+                //响应得到的数据
+                success: function (data) {
+                    console.log("查看更多，包含图片的");
+                    console.log(data);  //类数组对象
+                    var html = "";
+                    for (var i = 0; i < data.length; i++) {
+                        html += `
+                    <div class="news-img cf" data-val="${data[i].a_id}">
+                        <div class="news-img-l fl">
+                            <img src="images/${data[i].img_url}" alt="图片资源不存在"/>
+                        </div>
+                        <div class="news-img-r fl">
+                            <h2>${data[i].title}</h2>
+                            <p>
+                                <span class="type">${data[i].sorts}</span>
+                                <a class="" href="javascript:;">${data[i].writer}</a>
+                                <a class="" href="javascript:;">评论数</a>
+                                <span>${data[i].pubdate}</span>
+                            </p>
+                                <!--不感兴趣-->
+                            <div class="news-img-interest">
+                                <div class="not-ii">不感兴趣</div>
+                                <div class="not-i">×</div>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                    }
+                    newsImg.innerHTML = html;
+                }
+            });
+        }
+    }
+
+
+    //用户点击不感兴趣，隐藏节点display:none
+    {
+        //带图片的内容
+        let hasI = document.querySelector("#news-img");
+        hasI.onclick = function () {
+            event.preventDefault();
+            if (event.target.className == "not-ii" || event.target.className == "not-i") {
+                console.log("隐藏不感兴趣无图片");
+                event.target.parentNode.parentNode.parentNode.style.display = "none";
+            }
+            //event.target.parentNode.parentNode.style.display = "none";
+        }
+
+        //不带图片的===》
+        let notI = document.querySelector("#news");
+        notI.onclick = function () {
+            event.preventDefault();
+            if (event.target.className == "not-il" || event.target.className == "not-ir") {
+                console.log("隐藏不感兴趣带图片");
+                event.target.parentNode.parentNode.style.display = "none";
+            }
+            //event.target.parentNode.parentNode.style.display = "none";
+        }
+    }
+
+
+    //点击“更多”显示不同类型的数据（根据“军事”、“旅游”类型查找不同信息，事件委托机制）
+    {
+        var moreHide = document.querySelector("#more-hide");
+        moreHide.onclick = function (event) {
+            event.preventDefault();   //阻止事件默认行为
+            var notImg = document.querySelector("#news");
+            notImg.innerHTML = "";
+            var newsImg = document.querySelector("#news-img");
+            let val = event.target.innerText;
+            //console.log(val);
+            ajax({
+                url: "/comment/index_type",
+                type: "get",
+                async: true,
+                //提交的数据
+                data: {
+                    sorts: val
+                },
+                //响应得到的数据
+                success: function (data) {
+                    console.log(data);  //类数组对象
+                    if (data.msg == 0) {
+                        // alert(000);
+                        newsImg.innerHTML = "<div class='sorts-not'>抱歉，暂未找到！</div>";
+                    } else {
+                        var html = "";
+                        for (var i = 0; i < data.length; i++) {
+                            html += `
+                    <div class="news-img cf" data-val="${data[i].a_id}">
+                        <div class="news-img-l fl">
+                            <img src="images/${data[i].img_url}" alt="图片资源不存在"/>
+                        </div>
+                        <div class="news-img-r fl">
+                            <h2>${data[i].title}</h2>
+                            <p>
+                                <span class="type">${data[i].sorts}</span>
+                                <a class="" href="javascript:;">${data[i].writer}</a>
+                                <a class="" href="javascript:;">评论数</a>
+                                <span>${data[i].pubdate}</span>
+                            </p>
+                                <!--不感兴趣-->
+                            <div class="news-img-interest">
+                                <div class="not-ii">不感兴趣</div>
+                                <div class="not-i">×</div>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                        }
+                        newsImg.innerHTML = html;
+                    }
+                }
+            });
+        }
+    }
+
+
+    //点击发布"新鲜事"，检测没有登录账号，则提示登录(发布成功时，重新加载页面)
+    {
+        let sendMsg = document.querySelector("#send");
+        let publishTxt = document.querySelector("#publish-txt");
+
+        //获取当前时间
+        var time = new Date();
+        var dateTime = time.toLocaleString();
+        //console.log(dateTime);
+
+        sendMsg.onclick = function () {
+            var urlParams = new URLSearchParams(location.search);
+            var $u_id = urlParams.get("u_id");
+            var $uname = unescape(urlParams.get("uname"));
+            //console.log(111);
+            //console.log($u_id);
+            //console.log($uname);
+            if ($u_id == null) {
+                alert("请登录");
+                window.location.href = "http://127.0.0.1:8080/user/user_login.html";
+            } else {
+                if (publishTxt.value.length == 0) {
+                    alert("发布内容不能为空！");
+                } else {
+                    var isSend = window.confirm("是否确认发布！");
+                    //console.log(publishTxt.value)
+                    if (!isSend) {
+                        alert("发布取消了")
+                    } else {
+                        ajax({
+                            url: "/user/user_send",
+                            type: "post",
+                            async: true,
+                            //提交的数据
+                            data: {
+                                title: publishTxt.value,
+                                dateTime: dateTime,
+                                uname: $uname
+                            },
+                            //响应得到的数据
+                            success: function (data) {
+                                console.log(data);
+                                if (data.msg === 1) {
+                                    alert("发布成功！");
+                                    publishTxt.value = "";
+                                    location.reload();
+                                } else if (data.msg === 0) {
+                                    alert("发布失败！")
+                                } else {
+                                    alert("操作失效");
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        }
+    }
+
+
+
+
+    //还可以:window.addEventListener("load",()=>{})
+    //window.onload事件的多次调用：load事件缺陷==>不允许多次调用 ==》【此处为：封装的 window.onload 处理多个事件！！！】
+    //初始化事件的调用(使得window.onload可以多次调用)
+    function addLoadEvent(func) {
+        var oldOnload = window.onload;
+        if (typeof window.onload != "function") {
+            window.onload = func;
+        } else {
+            window.onload = function () {
+                oldOnload();
+                func();
+            }
+        }
+    }
+
+    //调用 ==> window.onload事件时，格式：addLoadEvent(函数名);  ==>函数名不加  “括号”
+    //window.onload 调用 ==> 展示用户从url获取的账号信息（昵称+头像）。判断当用户没登录时不执行展示用户信息函数
+    if ($uname != "null") {
+        addLoadEvent(showUserMessage);
+    }
+    //window.onload 调用没有图片的文章
+    addLoadEvent(getNotImg);
+    //window.onload 调用包含图片的文章
+    addLoadEvent(getHasImg);
+
+
+
+
+
+//性能优化：图片懒加载(待)。（样式重用【已完成】）
+
+
+</script>
+
+</html>

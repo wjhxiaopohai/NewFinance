@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>模仿我的-首页</title>
+    <link rel="stylesheet" href="../css/reset.css" />
+    <link rel="icon" href="../images/favicon_5995b44.ico" />
+    <script src="../js/ajax.js"></script>
+    <style>
+        body {
+            background-color: #f4f5f6;
+        }
+
+        /*头部*/
+        .head {
+            margin: 0 auto;
+            min-width: 1200px;
+            background-color: #222;
+        }
+
+        .head-l {
+            margin-left: 10px;
+        }
+
+        .head-l>ul>li {
+            padding: 9px 0;
+            margin-left: 15px;
+            color: #fff;
+        }
+
+        .head-l a {
+            color: #fff;
+        }
+
+        .head-l a:hover {
+            text-decoration: none;
+        }
+
+        .head-l li:last-child {
+            position: relative;
+        }
+
+        .head-l i {
+            display: inline-block;
+            position: absolute;
+            top: 12px;
+            left: 32px;
+            width: 6px;
+            height: 6px;
+            /*background-color: red;*/
+            border-right: 2px solid #fff;
+            border-bottom: 2px solid #fff;
+            transform: rotate(45deg);
+        }
+
+        /*更多：隐藏部分*/
+        .more-hide {
+            display: none;
+            position: absolute;
+            top: 37px;
+            left: -35px;
+            border: 1px solid #e8e8e8;
+            background-color: #fff;
+        }
+
+        .more-hide li {
+            padding: 10px 30px;
+            width: 40px;
+            text-align: center;
+            color: #222222;
+            /*border: 1px solid red;*/
+        }
+
+        .more-hide li>a,
+        .product-hide li a {
+            color: #444;
+        }
+
+        .more-hide li:hover {
+            background-color: #e8e8e8;
+        }
+
+        .more:hover .more-hide {
+            display: block;
+        }
+
+        /*头部右边*/
+        .head-r {
+            position: relative;
+        }
+
+        .head-r>ul>li {
+            color: #fff;
+            padding: 8px 12px;
+            border-left: 1px solid #fff;
+            /*cursor: pointer;*/
+        }
+
+        .head-r span {
+            cursor: pointer;
+        }
+
+        .head-r>ul>li:first-child {
+            border-left: 0;
+            /*background-color: #ed4040;*/
+            margin-right: 10px;
+            width: 120px;
+        }
+
+        /*用户头像*/
+        .login {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .login img {
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            vertical-align: middle;
+        }
+
+        /*用户登录隐藏*/
+        .login-hide {
+            display: none;
+            position: absolute;
+            left: 10px;
+            top: 37px;
+            border: 1px solid #e8e8e8;
+            border-top: 0;
+            background-color: #fff;
+        }
+
+        .login-hide li {
+            padding: 5px 30px;
+        }
+
+        .login-hide li a {
+            color: #444;
+        }
+
+        .login-hide li:hover {
+            background-color: #f5f6f7;
+        }
+
+        .login-hide li:hover a {
+            text-decoration: none;
+        }
+
+        /*用户登录显示*/
+        .login:hover .login-hide {
+            display: block;
+        }
+
+        /*头条产品：隐藏*/
+        .product {
+            position: relative;
+        }
+
+        .product-hide {
+            display: none;
+            position: absolute;
+            left: -22px;
+            top: 37px;
+            background-color: #fff;
+            border: 1px solid #e8e8e8;
+        }
+
+        .product-hide li {
+            padding: 10px 20px;
+            width: 60px;
+            text-align: center;
+        }
+
+        /*.product-hide li a {*/
+        /*color: #444;*/
+        /*}*/
+        .product-hide li:hover {
+            background-color: #e8e8e8;
+        }
+
+        .product-hide li:hover a {
+            text-decoration: none;
+        }
+
+        .product:hover .product-hide {
+            display: block;
+        }
+
+        /*logo-search*/
+        .logo-search {
+            width: 100%;
+            /*border-bottom: 2px solid #999999;*/
+            box-shadow: 1px 1px 5px 0 #999999;
+        }
+
+        .logo-search-center {
+            margin: 0 auto;
+            width: 1200px;
+            /*border: 1px solid blue;*/
+        }
+
+        .logo img {
+            margin-top: 15px;
+        }
+
+        .search {
+            margin: 15px 0;
+            padding: 5px 10px;
+            width: 250px;
+            border: 1px solid #e8e8e8;
+            border-radius: 4px;
+            background-color: #f5f6f7;
+        }
+
+        .search input {
+            /*outline:1px solid red;*/
+            background-color: #f5f6f7;
+        }
+
+        .search button {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            margin-top: 1px;
+            margin-left: 50px;
+            /*background-color: red;*/
+            background-image: url("../images/search.png");
+            cursor: pointer;
+        }
+
+        /*主体*/
+        .main {
+            margin: 10px auto;
+            width: 1200px;
+            /*border: 1px solid red;*/
+        }
+
+        /*背景、头像*/
+        .main-bc {
+            position: relative;
+            height: 260px;
+            background-color: #fff;
+            z-index: -1;
+        }
+
+        .head-img {
+            position: absolute;
+            left: 50px;
+            top: 160px;
+            width: 600px;
+        }
+
+        .head-img img {
+            height: 90px;
+            width: 90px;
+            border-radius: 50%;
+            vertical-align: middle;
+        }
+
+        .head-img a {
+            font-weight: bold;
+            font-size: 22px;
+            color: #000;
+        }
+
+        .head-img a:hover {
+            text-decoration: none;
+        }
+
+        /*收藏、关注*/
+        .main-contain {
+            margin: 20px auto;
+            /*border: 1px solid green;*/
+        }
+
+        /*左边：视频、收藏*/
+        .contain-l {
+            width: 780px;
+            /*border: 1px solid red;*/
+        }
+
+        .contain-l-nav {
+            background-color: #fff;
+        }
+
+        .contain-l-nav span {
+            display: inline-block;
+            padding: 10px 0;
+            margin-left: 35px;
+            font-size: 18px;
+            color: #000;
+            cursor: pointer;
+        }
+
+        .contain-l-nav .collect {
+            border-bottom: 1px solid #e72418;
+        }
+
+        /*.contain-l-nav a:hover {
+            text-decoration: none;
+        }*/
+        .contain-box {
+            margin-top: 3px;
+            width: 100%;
+            height: 460px;
+            background-color: #fff;
+            background-image: url("../images/bc-2.png");
+            background-repeat: no-repeat;
+            background-position: center center;
+            overflow-y: auto;
+        }
+
+        /*右边：关注、粉丝*/
+        .contain-r {
+            width: 360px;
+            /*border: 1px solid red;*/
+            background-color: #fff;
+        }
+
+        .contain-r a {
+            display: inline-block;
+            margin: 10px 0;
+            padding: 0 70px;
+            text-align: center;
+        }
+
+        .contain-r a:hover {
+            text-decoration: none;
+        }
+
+        .contain-r a:first-child {
+            border-right: 1px solid #999999;
+        }
+
+        .contain-r p {
+            font-weight: bold;
+            font-size: 18px;
+            color: #222;
+        }
+
+        .contain-r span {
+            color: #777;
+            font-size: 16px;
+        }
+
+        /*尾部*/
+        .footer {
+            text-align: center;
+            padding: 20px 0;
+            /*border: 1px solid red;*/
+            background-color: #fff;
+        }
+
+        .footer div {
+            min-width: 1200px;
+        }
+
+        .footer a:hover {
+            text-decoration: none;
+        }
+
+        .footer span {
+            color: #9a9a9a;
+        }
+
+        .contain-box::before {
+            display: table;
+            content: "";
+        }
+
+        .show-say {
+            margin-top: 10px;
+            /*margin-left: 20px;*/
+            /*border-bottom: 1px solid #E8E8E8;*/
+        }
+
+        .show-say .show-uname {
+            margin-left: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .show-say .show-content {
+            margin: 5px 10px;
+        }
+
+        .show-say span {
+            color: #999999;
+            margin-left: 10px;
+        }
+
+        .show-say hr {
+            width: 98%;
+            margin: 0 auto;
+            background-color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <!--头部-->
+    <div class="head cf">
+        <div class="head-l fl">
+            <ul class="cf">
+                <li class="fl"><a href="">推荐</a></li>
+                <li class="fl"><a href="">热点</a></li>
+                <li class="fl"><a href="">体育</a></li>
+                <li class="fl"><a href="">财经</a></li>
+                <li class="fl"><a href="">娱乐</a></li>
+                <li class="fl"><a href="">科技</a></li>
+                <li class="fl"><a href="">汽车</a></li>
+                <li class="fl"><a href="">军事</a></li>
+                <li class="fl"><a href="">国际</a></li>
+                <li class="fl"><a href="">时尚</a></li>
+                <li class="fl"><a href="">旅游</a></li>
+                <li class="fl"><a href="">探索</a></li>
+                <li class="fl"><a href="">育儿</a></li>
+                <li class="more fl">更多<i></i>
+                    <!--更多：隐藏部分-->
+                    <ul class="more-hide">
+                        <li><a href="">养生</a></li>
+                        <li><a href="">美文</a></li>
+                        <li><a href="">游戏</a></li>
+                        <li><a href="">历史</a></li>
+                        <li><a href="">美食</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="head-r fr fr">
+            <ul class="cf">
+                <li class="login fl">
+                    <img id="user_img1" src="" alt="" />
+                    <span id="user_name1"></span>
+                    <!--登录：隐藏部分-->
+                    <ul class="login-hide">
+                        <li><a href="javascript:;">我的资料</a></li>
+                        <li><a href="javascript:;">我的收藏</a></li>
+                        <li><a href="javascript:;">我的关注</a></li>
+                        <li><a href="javascript:;">我的粉丝</a></li>
+                        <li><a href="http://127.0.0.1:8080/index.html">退出</a></li>
+                    </ul>
+                </li>
+                <li class="tickling fl"><span>反馈</span></li>
+                <li class="complain fl"><span>投诉侵权</span></li>
+                <li class="product fl"><span>头条产品</span>
+                    <!--头条产品：隐藏-->
+                    <ul class="product-hide">
+                        <li><a href="javascript:;">问答</a></li>
+                        <li><a href="javascript:;">头条号</a></li>
+                        <li><a href="javascript:;">图虫</a></li>
+                        <li><a href="javascript:;">正版图库</a></li>
+                        <li><a href="javascript:;">懂车帝</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!--搜索-->
+    <div class="logo-search">
+        <div class="logo-search-center cf">
+            <!--LOGO-->
+            <div class="logo fl">
+                <a id="return_index" href="javascript:;">
+                    <img src="../images/logo.271e845.png" height="30px" width="105px" alt="图片资源不存在" />
+                </a>
+            </div>
+            <!--搜索框-->
+            <div class="search fr">
+                <input type="text" placeholder="请输入关键字" />
+                <button></button>
+            </div>
+        </div>
+    </div>
+
+    <!--主体-->
+    <div class="main">
+        <!--背景、头像-->
+        <div class="main-bc">
+            <div class="head-bc-img">
+                <img src="../images/bg_profile.png" width="100%" alt="" />
+            </div>
+            <div class="head-img">
+                <img id="user_img2" src="" alt="" />
+                <a href="javascript:;"><span id="user_name2"></span></a>
+            </div>
+        </div>
+        <!--收藏、关注-->
+        <div class="main-contain cf">
+            <!--左边：视频、收藏-->
+            <div class="contain-l fl">
+                <div class="contain-l-nav">
+                    <span class="collect">视频</span>
+                    <span class="send" id="user_send">发布</span>
+                </div>
+                <div class="contain-box">
+                    <!--<div class="show-say">
+						<h3 class="show-uname">马小云</h3>
+						<p class="show-content">继续学习吗?</p>
+						<p>
+							<span>文章类别</span>
+							<span>评论数</span>
+							<span>发布时间</span>
+						</p>
+						<hr />
+					</div>-->
+                </div>
+            </div>
+            <!--右边：关注、粉丝-->
+            <div class="contain-r fr">
+                <a class="" href="javascript:;">
+                    <p>关注</p>
+                    <span>0</span>
+                </a>
+                <a class="" href="javascript:;">
+                    <p>粉丝</p>
+                    <span>0</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!--尾部-->
+    <div class="footer">
+        <div>
+            <span>© 2019 今日头条 </span>
+            <a href="">中国互联网举报中心</a>
+            <a href="">京ICP证140141号</a>
+            <a href="">京ICP备12025439号-3</a>
+            <a href="">
+                <img src="../images/gongan_d0289dc.png" alt="" />
+                京公网安备 11000002002023号
+            </a>
+        </div>
+        <div>
+            <a href="">网络文化经营许可证</a>
+            <a href="">跟帖评论自律管理承诺书</a>
+            <a href="">违法和不良信息举报电话：400-140-2108</a>
+            <span>公司名称：北京字节跳动科技有限公司</span>
+        </div>
+    </div>
+
+</body>
+<script>
+    {
+        var send = document.getElementsByClassName("send")[0];
+        var collect = document.getElementsByClassName("collect")[0];
+        //	console.log(send);
+        //	console.log(collect);
+        send.addEventListener("click", function () {
+            send.style.borderBottom = "1px solid #e72418";
+            collect.style.borderBottom = "0";
+            //请求ajax数据
+        })
+        collect.addEventListener("click", function () {
+            send.style.borderBottom = "0";
+            collect.style.borderBottom = "1px solid red";
+            //请求ajax数据
+        })
+    }
+
+    //从url获取用户u_id
+    var urlParams = new URLSearchParams(location.search);
+    var $u_id = urlParams.get("u_id");  //为用户的的索引u_id,供全局使用。
+    console.log($u_id);
+
+
+    //声明一个全局变量来接收姓名
+    var $uname = "";
+
+    //页面加载时，请求用户数据，并渲染
+    window.onload = function () {
+        var user_name1 = document.querySelector("#user_name1");
+        var user_img1 = document.querySelector("#user_img1");
+        var user_img2 = document.querySelector("#user_img2");
+        var user_name2 = document.querySelector("#user_name2");
+        //console.log(user_img1);
+
+        //设置返回首页的链接
+        var return_index = document.querySelector("#return_index");
+
+        ajax({
+            url: "http://127.0.0.1:8080/user/user_info",
+            type: "get",
+            async: true,
+            //提交的数据
+            data: {
+                uid: $u_id
+            },
+            //响应得到的数据
+            success: function (data) {
+                console.log(data);
+                //渲染用户信息
+                user_name1.innerHTML = data.result[0].uname;
+                user_name2.innerHTML = data.result[0].uname;
+                user_img1.src = "http://127.0.0.1:8080/images/" + data.result[0].head_img;
+                user_img2.src = "../images/" + data.result[0].head_img;
+                //	                console.log(data.result[0].head_img)
+                //设置返回首页数据(链接)
+                return_index.href = "http://127.0.0.1:8080/index.html?u_id=" + $u_id + "&head_img=" + escape(data.result[0].head_img) + "&uname=" + escape(data.result[0].uname);
+
+                $uname = data.result[0].uname;
+                //					console.log($uname);
+            }
+        });
+    }
+
+
+    //点击发布，查看自己的发表说说 
+    var user_send = document.querySelector("#user_send");
+    var contain_box = document.querySelector(".contain-box");
+    user_send.onclick = function () {
+        ajax({
+            url: "http://127.0.0.1:8080/user/user_article",
+            type: "get",
+            async: "true",
+            data: {
+                uname: $uname
+            },
+            success: function (data) {
+                console.log(data);
+                //console.log(data.result.length);
+                var html = ""
+                for (var i = 0; i < data.result.length; i++) {
+                    html += `
+					<div class="show-say">
+						<h3 class="show-uname">${data.result[i].writer}</h3>
+						<p class="show-content">${data.result[i].title}</p>
+						<p>
+							<span>${data.result[i].sorts}</span>
+							<span>评论数</span>
+							<span>${data.result[i].pubdate}</span>
+						</p>
+						<hr />
+					</div>
+					`;
+                }
+                contain_box.innerHTML = html;
+            }
+        });
+    }
+
+
+</script>
+
+</html>

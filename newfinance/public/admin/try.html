@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        #d1 {
+            font-size: 24px;
+            color: red;
+            cursor: pointer;
+        }
+
+        #d2 {
+            font-size: 24px;
+            color: green;
+            cursor: pointer;
+        }
+
+        #d3 {
+            font-size: 24px;
+            color: blue;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="d1">111
+        <div id="d2">222
+            <div id="d3">333</div>
+        </div>
+    </div>
+</body>
+<script>
+    var d1 = document.querySelector("#d1");
+    var d2 = document.querySelector("#d2");
+    var d3 = document.querySelector("#d3");
+    d3.onclick = function (e) {
+        e.target.parentNode.parentNode.style.color = "pink";
+    }
+</script>
+
+</html>

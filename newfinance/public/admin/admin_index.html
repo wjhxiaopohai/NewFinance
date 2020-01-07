@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>头条后台管理员</title>
+    <link rel="stylesheet" href="../css/reset.css" />
+    <style>
+        .head {
+            min-width: 1200px;
+            background-color: #c6554f;
+            color: #fff;
+            height: 50px;
+        }
+
+        .head-l span {
+            margin: 0 20px;
+            font-size: 24px;
+            font-weight: bold;
+            /*vertical-align: middle;*/
+        }
+
+        .head-l i {
+            line-height: 50px;
+        }
+
+        .head-r {
+            line-height: 50px;
+        }
+
+        .head-r span {
+            font-size: 18px;
+        }
+
+        .head-r a {
+            color: #fff;
+            margin: 0 30px;
+        }
+
+        .head-r a:hover {
+            text-decoration: none;
+            opacity: 0.6;
+        }
+
+        /*主体*/
+        .main {
+            min-width: 1200px;
+            /*border: 1px solid black;*/
+            height: 739px;
+            overflow: hidden;
+        }
+
+        .main-l {
+            position: absolute;
+            top: 50px;
+            left: 0;
+            width: 240px;
+            height: 739px;
+            background-color: #2b3141;
+            color: #fff;
+            font-size: 18px;
+        }
+
+        .main-l>ul {
+            /*margin-top: 15px;*/
+        }
+
+        .main-l>ul>li {
+            text-align: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #777777;
+            cursor: pointer;
+        }
+
+        .main-l>ul>li:last-child {
+            border-bottom: 0;
+        }
+
+        .main-l>ul>li:hover {
+            color: #c6554f;
+        }
+
+        .nav-hide {
+            /*display: none;*/
+            text-align: center;
+        }
+
+        /*.main-l>ul>li:hover .nav-hide {*/
+        /*display: block;*/
+        /*}*/
+        /*隐藏部分*/
+        .nav-hide {}
+
+        .nav-hide li {
+            padding: 5px 0;
+        }
+
+        .nav-hide a {
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .nav-hide li:hover {
+            background-color: #f48c8c;
+            border-radius: 5px;
+        }
+
+        .nav-hide li:hover a {
+            text-decoration: none;
+        }
+
+        /*主体右边*/
+        .main-r {
+            position: absolute;
+            left: 240px;
+            top: 50px;
+            /*width: 100%;*/
+            width: calc(100% - 240px);
+            min-width: 960px;
+            height: 739px;
+            /*background-color: red;*/
+        }
+
+        #ifr {
+            width: 100%;
+            height: 100%;
+            /*background-color: #e8e8e8;*/
+        }
+    </style>
+</head>
+
+<body>
+    <header class="head cf">
+        <div class="head-l fl">
+            <span>今日头条</span>
+            <i>欢迎使用后台系统！</i>
+        </div>
+        <div class="head-r fr">
+            <span>Admin</span>
+            <a href="">退出</a>
+        </div>
+    </header>
+    <div class="main">
+        <!--左边导航栏-->
+        <aside class="main-l">
+            <ul class="nav" id="nav">
+                <li class="ll">
+                    账号信息
+                    <ul class="nav-hide" style="display: none">
+                        <li><a href="">基本信息</a></li>
+                        <li><a href="">密码修改</a></li>
+                        <li><a href="">基本信息</a></li>
+                        <li><a href="">密码修改</a></li>
+                    </ul>
+                </li>
+
+                <li class="ll">
+                    用户管理
+                    <ul class="nav-hide" style="display: none">
+                        <li><a href="">基本信息</a></li>
+                        <li><a href="">密码修改</a></li>
+                        <li><a href="">基本信息</a></li>
+                        <li><a href="">密码修改</a></li>
+                    </ul>
+                </li>
+
+                <li class="ll">
+                    文章管理
+                    <ul class="nav-hide" style="display: none">
+                        <li><a href="">基本信息</a></li>
+                        <li><a href="">密码修改</a></li>
+                        <li><a href="">基本信息</a></li>
+                        <li><a href="">密码修改</a></li>
+                    </ul>
+                </li>
+
+                <li class="ll">
+                    数据统计
+                    <ul class="nav-hide" style="display: none">
+                        <li><a href="">基本信息</a></li>
+                        <li><a href="">密码修改</a></li>
+                        <li><a href="">基本信息</a></li>
+                        <li><a href="">密码修改</a></li>
+                    </ul>
+                </li>
+
+                <li class="ll">
+                    系统管理
+                    <ul class="nav-hide" style="display: none">
+                        <li><a href="">基本信息</a></li>
+                        <li><a href="">密码修改</a></li>
+                        <li><a href="">基本信息</a></li>
+                        <li><a href="">密码修改</a></li>
+                    </ul>
+                </li>
+
+            </ul>
+        </aside>
+        <!--右边iframe-->
+        <section class="main-r">
+            <!--222-->
+            <iframe id="ifr" src="try.html" frameborder="0" scrolling=""></iframe>
+        </section>
+    </div>
+</body>
+<script>
+    var lis = document.querySelector("#nav");
+
+    lis.onclick = function () {
+        event.stopPropagation();
+        if (event.target.className == "ll") {
+            var li = event.target;
+            //console.log(li);
+            var hide_ul = li.querySelector("ul");
+            //console.log(hide_ul);
+            if (hide_ul.style.display == "none") {
+                hide_ul.style.display = "block";
+                li.style.color = "#c6554f";
+            } else {
+                hide_ul.style.display = "none";
+                li.style.color = "#fff";
+            }
+        } else {
+            return false;
+        }
+    }
+</script>
+
+</html>

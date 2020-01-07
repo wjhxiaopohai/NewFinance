@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>例子</title>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <button onclick="getAjax()">获取数据</button>
+    <div id="d"></div>
+</body>
+<script>
+    /**
+     * Created by web on 2019/11/13.
+     */
+    //封装ajax
+
+    function ajax(options) {
+        var xhr = null;
+        //获取参数
+        var params = formsParams(options.date);
+        //创建对象
+        if (window.XMLHttpRequest) {
+            xhr = new XMLHttpRequest();
+        } else {
+            xhr = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        //连接类型
+        if (options.type == "GET") {
+            xhr.open(options.type, options.url + "?" + params, options.async);
+            xhr.send();
+        } else if (options.type == "POST") {
+            xhr.open(options.type, options.url, options.async);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.send(params);
+        }
+
+        //监听事件
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                options.success(JSON.parse(xhr.responseText));
+            }
+        }
+
+        //提交参数
+        function formsParams(data) {
+            var arr = [];
+            for (var prop in data) {
+                arr.push(prop + "=" + data[prop]);
+            }
+            //将数组拼接为字符串，末尾添加"&"
+            return arr.join("&");
+        }
+    }
+
+    //调用函数ajax
+    //    ajax({
+    //        url:"./111.json",
+    //        type:"GET",
+    //        async:true,
+    //        data: {
+    //            name:"张三",
+    //            age:18
+    //        },
+    //        success: function(data) {
+    //            console.log(data);
+    //        }
+    //    })
+
+
+
+    var d = document.getElementById("d");
+    function getAjax() {
+        ajax({
+            url: "./111.json",
+            type: "GET",
+            async: true,
+            //提交的数据
+            data: {
+                name: "张三",
+                age: 18
+            },
+            //请求的数据
+            success: function (data) {
+                console.log(data);
+                console.log(this.url);
+                console.log(this.data);
+                var html = "";
+                for (var i = 0; i < data.length; i++) {
+                    html += `<p>${data[i].name}=====${data[i].age}</p>`;
+                }
+                d.innerHTML = html;
+            }
+        })
+
+    }
+</script>
+
+</html>

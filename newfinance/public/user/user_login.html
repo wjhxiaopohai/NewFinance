@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <title>模仿今日头条登录</title>
+    <link rel="stylesheet" href="../css/reset.css" />
+    <style>
+        body {
+            width: 100%;
+            min-height: 700px;
+            background: url("../images/login_bg_7584f6a.png") no-repeat;
+            background-size: 100% 100%;
+        }
+
+        .top-logo {
+            padding: 10px 10px;
+        }
+
+        .top-logo a {
+            display: inline-block;
+            height: 32px;
+        }
+
+        .container {
+            margin: 75px auto;
+            width: 375px;
+            /*border: 1px solid red;*/
+            border-radius: 5px;
+            font-size: 16px;
+
+        }
+
+        .login-form {
+            padding: 2px 20px;
+            background-color: #fff;
+        }
+
+        .login-form div {
+            margin: 20px auto;
+            border: 1px solid #999999;
+            /*text-align: center;*/
+            line-height: 40px;
+        }
+
+        div.login {
+            border: none;
+            border-bottom: 1px solid #999999;
+            text-align: center;
+        }
+
+        /*手机号*/
+        .phone {
+            padding: 0 10px;
+        }
+
+        .phone select {
+            margin-right: 2px;
+            border: 0;
+            font-size: 16px;
+            text-align: center;
+            -ms-text-align-last: center;
+            text-align-last: center;
+            outline: none;
+            cursor: text;
+        }
+
+        .phone input {
+            margin-left: 5px;
+        }
+
+        /*验证码*/
+        input {
+            font-size: 16px;
+        }
+
+        .yzm {
+            padding: 0 12px;
+        }
+
+        .yzm .inp {
+            /*width: 120px;*/
+        }
+
+        .yzm .send {
+            /*margin-left: 10px;*/
+            background-color: #fff;
+            cursor: pointer;
+        }
+
+        /*.yzm .send:hover {*/
+        /*color: #999999;*/
+        /*}*/
+        /*确定*/
+        .sub {
+            border-radius: 5px;
+            background-color: #f85959;
+            text-align: center;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        div.sub:hover {
+            -webkit-transform: scale(1.02, 1);
+            -moz-transform: scale(1.02, 1);
+            -ms-transform: scale(1.02, 1);
+            -o-transform: scale(1.02, 1);
+            transform: scale(1.02, 1);
+        }
+
+        /*其他登录 */
+        .other-login {
+            text-align: center;
+        }
+
+        .other-top {
+            margin-top: 20px;
+        }
+
+        .other-method {
+            color: #898989;
+            font-size: 16px;
+        }
+
+        .other-method::before {
+            display: inline-block;
+            width: 135px;
+            height: 1px;
+            content: '';
+            border-top: 1px solid #898989;
+            margin-right: 20px;
+            margin-bottom: 4px;
+        }
+
+        .other-method::after {
+            display: inline-block;
+            width: 135px;
+            height: 1px;
+            content: '';
+            border-top: 1px solid #898989;
+            margin-left: 20px;
+            margin-bottom: 4px;
+        }
+
+        .icons {
+            margin: 20px auto;
+
+        }
+
+        .icons ul li {
+            font-size: 12px;
+            color: #323232;
+        }
+
+        .icons a {
+            display: inline-block;
+        }
+
+        .icons a:hover {
+            opacity: 0.4;
+        }
+
+        .icons a:first-child {
+            cursor: pointer;
+        }
+
+        .icons img {
+            border-radius: 50%;
+        }
+
+        .icon {
+            width: 45px;
+            height: 45px;
+            /*border: 1px solid black;*/
+            border-radius: 50%;
+        }
+
+        .icon2 {
+            padding-bottom: 2px;
+        }
+
+        .u2 {
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+
+        .other-bottom {
+            font-size: 14px;
+        }
+
+        .other-bottom a {
+            color: #406599;
+        }
+
+        .other-bottom a:last-child {
+            margin-right: -20px;
+            margin-left: 10px;
+        }
+
+        #reg {
+            display: none;
+        }
+
+
+
+        /*媒体查询485px*/
+        @media screen and (max-width: 576px) {
+            * {
+                padding: 0;
+                margin: 0;
+            }
+
+            body {
+                background-image: none;
+                /*background-color: yellow;*/
+                font-size: 44px;
+            }
+
+            .top-logo {
+                margin-top: -8px;
+            }
+
+            .container {
+                margin-top: 68px;
+            }
+        }
+
+        /*登录ajax验证时提示消息*/
+        #login_tip {}
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <!--LOGO图-->
+        <div class="top-logo">
+            <a href="#">
+                <img src="../images/logo.271e845.png" width="110px" height="32px" alt="" />
+            </a>
+        </div>
+
+
+        <!--登录：显示部分-->
+        <div class="container" id="login">
+            <!--手机号/邮箱：登录==》因为手机号/邮箱为唯一性，否则特殊情况：当两个账号密码碰巧一样，手机号或邮箱又一样，就会同时得到两个账号信息！-->
+            <div class="login-form">
+                <div class="login">账号登录</div>
+                <label for="user_email">
+                    <div class="phone">
+                        <input type="text" id="user_email" name="email" placeholder="手机号/邮箱" />
+                    </div>
+                </label>
+                <label for="user_pwd">
+                    <div class="yzm">
+                        <input class="inp" id="user_pwd" name="pwd" type="password" placeholder="密码" />
+                    </div>
+                </label>
+                <!--用于显示提示信息的-->
+                <span id="login_tip"></span>
+                <div class="sub" onclick="getLogin()">确定</div>
+            </div>
+
+            <!--其他方式-->
+            <div class="other-login">
+                <div class="other-top">
+                    <div class="other-method">其他方式</div>
+                    <div class="icons">
+                        <a onclick="showReg()">
+                            <ul class="u1">
+                                <li class="icon icon1"><img src="../images/zhang_small.png" alt="" /></li>
+                                <li>手机</li>
+                            </ul>
+                        </a>
+                        <a href="#">
+                            <ul class="u2">
+                                <li class="icon icon2"><img src="../images/qq_small.png" alt="" /></li>
+                                <li>QQ</li>
+                            </ul>
+                        </a>
+                        <a href="#">
+                            <ul class="u3">
+                                <li class="icon icon3"><img src="../images/weixin_small.png" alt="" /></li>
+                                <li>微信</li>
+                            </ul>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="other-bottom">
+                    <span>登录/注册即表示你同意</span>
+                    <a href="#">用户协议</a>
+                    <span>和</span>
+                    <a href="#">隐式条款</a>
+                    <a href="#">忘记密码</a>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!--隐藏部分:注册-->
+        <!--隐藏部分-->
+        <div class="container" id="reg">
+            <!--登录注册-->
+            <div class="login-form">
+                <div class="login">手机号注册</div>
+                <div class="phone">
+                    <select name="" id="">
+                        <option value="">+851</option>
+                        <option value="">+852</option>
+                        <option value="">+853</option>
+                    </select>
+                    <span>|</span>
+                    <input type="text" name="" placeholder="手机号" />
+                </div>
+                <div class="yzm">
+                    <input class="inp" name="" type="text" placeholder="请输入4位验证码" />
+                    <span>|</span>
+                    <input class="send" id="send-yzm" type="button" value="发送验证码" />
+                </div>
+                <!--用于显示提示信息的-->
+                <span></span>
+                <div class="sub">确定</div>
+            </div>
+
+            <!--其他方式-->
+            <div class="other-login">
+                <div class="other-top">
+                    <div class="other-method">其他方式</div>
+                    <div class="icons">
+                        <a onclick="showLogin()">
+                            <ul class="u1">
+                                <li class="icon icon1"><img src="../images/letter_small.png" alt="" /></li>
+                                <li>账密</li>
+                            </ul>
+                        </a>
+                        <a href="#">
+                            <ul class="u2">
+                                <li class="icon icon2"><img src="../images/qq_small.png" alt="" /></li>
+                                <li>QQ</li>
+                            </ul>
+                        </a>
+                        <a href="#">
+                            <ul class="u3">
+                                <li class="icon icon3"><img src="../images/weixin_small.png" alt="" /></li>
+                                <li>微信</li>
+                            </ul>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="other-bottom">
+                    <span>登录/注册即表示你同意</span>
+                    <a href="#">用户协议</a>
+                    <span>和</span>
+                    <a href="#">隐式条款</a>
+                    <a href="#">忘记密码</a>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</body>
+<script src="../js/ajax.js"></script>
+<script>
+
+    //切换登录或注册页面
+    {
+        var login = document.querySelector("#login");
+        var reg = document.querySelector("#reg");
+        function showLogin() {
+            login.style.display = "block";
+            reg.style.display = "none";
+        }
+        function showReg() {
+            login.style.display = "none";
+            reg.style.display = "block";
+        }
+    }
+
+
+    //发送验证码（60秒重新发送）
+    {
+        let wait = 60;
+        function time(o) {
+            if (wait == 0) {
+                o.removeAttribute("disabled");
+                o.value = "重新发送";
+                o.style.cursor = "pointer";
+                wait = 60;
+            } else {
+                o.setAttribute("disabled", true);
+                o.value = wait + "秒重新发送";
+                o.style.cursor = "text";
+                wait--;
+                setTimeout(function () {
+                    time(o)
+                }, 1000)
+            }
+        }
+        document.getElementById("send-yzm").onclick = function () { time(this); }
+    }
+
+
+
+    //隐藏部分：账号邮箱登录
+    var user_email = document.getElementById("user_email");
+    var user_pwd = document.getElementById("user_pwd");
+    //验证输入框：非法字符串
+    user_email.onblur = function () {
+        var phone = document.getElementsByClassName("phone")[0];
+        if (user_email.value == "") {
+            alert("输入不能为空！");
+            phone.style.borderColor = "red";
+        } else if (user_email.value.length < 6 || user_email.value.length > 15) {
+            alert("请输入6~15位字符！");
+            phone.style.borderColor = "red";
+        } else if (/[^0-9a-zA-Z@_.]|[\s+]]/.test(user_email.value)) {
+            alert("空格或非法字符！合法提示：数字 字母 _ @ .");
+            phone.style.borderColor = "red";
+        } else {
+            phone.style.borderColor = "green";
+        }
+    }
+    user_pwd.onblur = function () {
+        var yzm = document.getElementsByClassName("yzm")[0];
+        if (user_pwd.value == "") {
+            alert("输入不能为空！");
+            yzm.style.borderColor = "red";
+        } else if (user_pwd.value.length < 6 || user_pwd.value.length > 15) {
+            alert("请输入6~15位字符！");
+            yzm.style.borderColor = "red";
+        } else if (/[^0-9a-zA-Z@_.]|[\s+]]/.test(user_pwd.value)) {
+            alert("空格或非法字符！合法提示：数字 字母 _ @ .");
+            yzm.style.borderColor = "red";
+        } else {
+            yzm.style.borderColor = "green";
+        }
+    }
+
+    //用户登录(账号/邮箱) ==》【ajax数据交互】
+    function getLogin() {
+        //获取(登录：账号/邮箱)输入框的值
+        var $user = user_email.value;
+        var $pwd = user_pwd.value;
+        console.log($user);
+        console.log($pwd);
+
+        //验证输入框的信息
+        if ($user == "" || $pwd == "") {
+            alert("输入的信息不能为空！");
+        } else {
+            ajax({
+                url: "/user/user_login",
+                type: "GET",
+                async: true,
+                //提交数据
+                data: {
+                    "user": $user,
+                    "pwd": $pwd
+                },
+                //响应得到的数据(回调函数:查询返回的是数组对象)
+                success: function (data) {
+                    //                    console.log(data);
+                    //                    console.log(data[0]);
+                    $u_id = data[0].u_id;
+                    $head_img = data[0].head_img;
+                    $uname = data[0].uname;
+                    if (data[0].msg == "0") {
+                        alert("输入账号/密码不正确！");
+                    } else {
+                        //当账户密码输入正确时，判断账号是否被冻结
+                        if (data[0].is_freeze == "1") {
+                            alert("该账号已被冻结！请联系客服解决");
+                        } else {
+                            //对传输的数据进行编码
+                            $u_id = escape($u_id);
+                            $head_img = escape($head_img);
+                            $uname = escape($uname);
+
+                            window.location.href = "http://127.0.0.1:8080/index.html?u_id=" + $u_id + "&head_img=" + $head_img + "&uname=" + $uname;
+                        }
+                    }
+                }
+            })
+        }
+    }
+
+</script>
+
+</html>
